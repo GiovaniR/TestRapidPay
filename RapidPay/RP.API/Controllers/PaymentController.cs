@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RP.CardManagement;
-using RP.Infrastructure;
+using RP.Application;
 using RP.Payment;
 using RP.Shared;
 

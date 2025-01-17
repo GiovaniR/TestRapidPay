@@ -1,6 +1,6 @@
 ﻿using RP.Shared;
 
-namespace RP.CardManagement
+namespace RP.Application
 {
     public interface ICardManagmentService
     {

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using RP.CardManagement;
-using RP.Infrastructure;
+using RP.Application;
 using RP.Payment;
 using System.Text;
 
