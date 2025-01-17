@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ICardManagmentService, CardManagementService>();
 builder.Services.AddSingleton<IPersist, Persist>();
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
-builder.Services.AddSingleton<IUniversalFeeExchangeService, UniversalFeeExchangeService>();
+builder.Services.AddSingleton<IUniversalFeeExchangeService ,UniversalFeeExchangeService>(provider => new UniversalFeeExchangeService(TimeSpan.FromMinutes(60)));
 
 var app = builder.Build();
 

@@ -5,15 +5,14 @@ namespace RP.Payment
 {
     public interface IPaymentService
     {
-        Card Pay(Card card);
+        Card Pay(Card card, decimal chargeAmount);
     }
 
     public class PaymentService : IPaymentService
     {
-        public Card Pay(Card card)
+        public Card Pay(Card card, decimal chargeAmount)
         {
             Random random = new Random();
-            var chargeAmount = random.Next(0,1000);
 
             if (card.Balance > chargeAmount)
                 card.ChargeCard(chargeAmount);

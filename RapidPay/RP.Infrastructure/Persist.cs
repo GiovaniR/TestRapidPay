@@ -7,12 +7,14 @@ namespace RP.Infrastructure
         Card SaveCard(Card card);
         List<Card> GetSavedCards();
         Card GetCard(string cardNumber);
+        UniversalFeeExchange SaveFee(UniversalFeeExchange fee);
+        UniversalFeeExchange GetFee();
     }
 
     public class Persist : IPersist
     {
         List<Card> Cards = new List<Card>();
-        UniversalFeeExchange Fee = new UniversalFeeExchange();
+        UniversalFeeExchange Fee;
 
         public Card SaveCard(Card card)
         {
@@ -41,6 +43,15 @@ namespace RP.Infrastructure
             return Cards.FindIndex(x => x.Number == cardNumber);
         }
 
+        public UniversalFeeExchange SaveFee(UniversalFeeExchange fee)
+        { 
+            Fee = fee;
+            return Fee;
+        }
 
+        public UniversalFeeExchange GetFee() 
+        { 
+            return Fee;
+        }
     }
 }
