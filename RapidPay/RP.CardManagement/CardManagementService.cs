@@ -14,7 +14,7 @@ namespace RP.Application
             var cardNumber = string.Empty;
             Random random = new Random();
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 15; i++)
             {
                 cardNumber += random.Next(0, 10).ToString();
             }
