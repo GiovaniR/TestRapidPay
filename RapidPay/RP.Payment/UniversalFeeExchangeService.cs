@@ -52,9 +52,7 @@ namespace RP.Payment
                 fee = CurrentFee.Fee * fee;
             }
 
-            var currentDate = DateTime.UtcNow;
-            var expireDate = DateTime.UtcNow.AddHours(1);
-            return new UniversalFeeExchange(fee, currentDate, expireDate);
+            return new UniversalFeeExchange(fee);
         }
     }
 }

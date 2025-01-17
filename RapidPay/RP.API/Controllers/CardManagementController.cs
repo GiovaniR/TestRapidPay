@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RP.CardManagement;
 using RP.Infrastructure;
 using RP.Shared;
@@ -21,6 +22,7 @@ namespace RP.API.Controllers
         }
 
         [HttpGet(Name = "CreateCard")]
+        [Authorize]
         public string Create()
         {
             var newCard = _cardManagmentService.CreateCard();
@@ -30,12 +32,14 @@ namespace RP.API.Controllers
         }
 
         [HttpGet(Name = "GetCards")]
+        [Authorize]
         public List<Card> GetAll()
         { 
             return _persistCard.GetSavedCards();
         }
 
         [HttpGet(Name = "GetBalance")]
+        [Authorize]
         public Card GetBalance(string number)
         {
             return _persistCard.GetCard(number);

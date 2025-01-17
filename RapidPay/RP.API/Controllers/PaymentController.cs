@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RP.CardManagement;
 using RP.Infrastructure;
 using RP.Payment;
@@ -25,6 +26,7 @@ namespace RP.API.Controllers
         }
 
         [HttpGet(Name = "Pay")]
+        [Authorize]
         public Card Pay(string cardNumber, decimal amount)
         {
             var ufe = _feeExchangeService.CheckAndRefresh();
