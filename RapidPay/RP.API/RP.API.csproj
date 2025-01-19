@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RP.CardManagement\RP.Application.csproj" />
-    <ProjectReference Include="..\RP.Payment\RP.Payment.csproj" />
     <ProjectReference Include="..\RP.Shared\RP.Shared.csproj" />
   </ItemGroup>
 

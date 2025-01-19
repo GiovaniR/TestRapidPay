@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RP.Application;
-using RP.Payment;
+using RP.External;
+using RP.Infrastructure;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,9 +57,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddSingleton<ICardManagmentService, CardManagementService>();
+
+builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+//Save In-Memory
 builder.Services.AddSingleton<IPersist, Persist>();
-builder.Services.AddSingleton<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<IUniversalFeeExchangeService ,UniversalFeeExchangeService>(provider => new UniversalFeeExchangeService(TimeSpan.FromMinutes(60)));
 
 var app = builder.Build();

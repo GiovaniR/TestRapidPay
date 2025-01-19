@@ -1,7 +1,10 @@
-﻿namespace RP.Shared
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RP.Shared
 {
     public class Card
     {
+        [StringLength(maximumLength: 15, MinimumLength = 15)]
         public string Number { get; set; }
         public decimal Balance { get; set; }
         public decimal OriginalAmount { get; }
@@ -20,9 +23,9 @@
             return this;
         }
 
-        public Card SetLastFee(UniversalFeeExchange fee)
+        public Card SetLastFee(decimal fee)
         {
-            LastFee = fee.Fee;
+            LastFee = fee;
             return this;
         }
     }

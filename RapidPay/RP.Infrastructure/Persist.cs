@@ -4,19 +4,16 @@ namespace RP.Infrastructure
 {
     public interface IPersist
     {
-        Card SaveCard(Card card);
-        List<Card> GetSavedCards();
-        Card GetCard(string cardNumber);
-        UniversalFeeExchange SaveFee(UniversalFeeExchange fee);
-        UniversalFeeExchange GetFee();
+        Task<List<Card>> SaveCardAsync(Card card);
+        Task<Card> GetCardByNumberAsync(string cardNumber);
+        Task<List<Card>> GetAllCardsAsync();
     }
 
     public class Persist : IPersist
     {
         List<Card> Cards = new List<Card>();
-        UniversalFeeExchange Fee;
 
-        public Card SaveCard(Card card)
+        public async Task<List<Card>> SaveCardAsync(Card card)
         {
             var index = FindCardIndex(card.Number);
 
@@ -25,33 +22,20 @@ namespace RP.Infrastructure
             else
                 Cards.Add(card);
             
-            return card;
+            return Cards;
         }
 
-        public List<Card> GetSavedCards()
+        public Task<Card> GetCardByNumberAsync(string cardNumber)
         {
-            return Cards.ToList();
+            var card = Cards.Single(x => x.Number == cardNumber);
+            return Task.FromResult(card);
         }
 
-        public Card GetCard(string cardNumber)
-        {
-            return Cards.Single(x => x.Number == cardNumber);
-        }
+        public Task<List<Card>> GetAllCardsAsync() => Task.FromResult(Cards.ToList());
 
-        public int FindCardIndex(string cardNumber)
+        private int FindCardIndex(string cardNumber)
         {
             return Cards.FindIndex(x => x.Number == cardNumber);
-        }
-
-        public UniversalFeeExchange SaveFee(UniversalFeeExchange fee)
-        { 
-            Fee = fee;
-            return Fee;
-        }
-
-        public UniversalFeeExchange GetFee() 
-        { 
-            return Fee;
         }
     }
 }

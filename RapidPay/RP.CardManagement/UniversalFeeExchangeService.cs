@@ -1,19 +1,18 @@
 ﻿using RP.Shared;
-using System.Runtime.InteropServices;
 
-namespace RP.Payment
+namespace RP.Application
 {
     public interface IUniversalFeeExchangeService
     {
-        UniversalFeeExchange GenerateFee();
-        UniversalFeeExchange CheckAndRefresh();
+        decimal GenerateFee();
+        decimal CheckAndRefresh();
     }
 
     public class UniversalFeeExchangeService : IUniversalFeeExchangeService
     {
         private readonly TimeSpan _expiresAt;
         private DateTime _lastRefreshTime;
-        public UniversalFeeExchange CurrentFee { get; private set; }
+        public decimal CurrentFee { get; private set; }
 
         public UniversalFeeExchangeService(TimeSpan expiresAt)
         {
@@ -22,15 +21,15 @@ namespace RP.Payment
         }
 
         public void RefreshFee()
-        { 
+        {
             CurrentFee = GenerateFee();
             _lastRefreshTime = DateTime.UtcNow;
         }
 
-        public UniversalFeeExchange CheckAndRefresh()
+        public decimal CheckAndRefresh()
         {
             if (DateTime.UtcNow - _lastRefreshTime > _expiresAt)
-            { 
+            {
                 RefreshFee();
             }
 
@@ -38,21 +37,25 @@ namespace RP.Payment
         }
 
         private double GetFeeAmount()
-        { 
+        {
             Random random = new Random();
             return random.NextDouble() * (2 - 0) + 0;
         }
 
-        public UniversalFeeExchange GenerateFee()
-        { 
+        public decimal GenerateFee()
+        {
             var fee = Convert.ToDecimal(GetFeeAmount());
 
-            if (CurrentFee != null)
+            if (CurrentFee > 0)
+            {
+                CurrentFee = CurrentFee * fee;
+            }
+            else
             { 
-                fee = CurrentFee.Fee * fee;
+                CurrentFee = fee;
             }
 
-            return new UniversalFeeExchange(fee);
+            return CurrentFee;
         }
     }
 }

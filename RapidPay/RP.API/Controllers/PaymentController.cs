@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RP.Application;
-using RP.Payment;
+using RP.External;
 using RP.Shared;
 
 namespace RP.API.Controllers
@@ -11,32 +10,21 @@ namespace RP.API.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        private readonly IPersist _persist;
-        private readonly IUniversalFeeExchangeService _feeExchangeService;
 
         public PaymentController(
-            IPaymentService paymentService,
-            IPersist persistCard,
-            IUniversalFeeExchangeService feeExchangeService)
+            IPaymentService paymentService)
         {
             _paymentService = paymentService;
-            _persist = persistCard;
-            _feeExchangeService = feeExchangeService;
         }
 
-        [HttpGet(Name = "Pay")]
+        [HttpPost(Name = "Pay")]
         [Authorize]
-        public Card Pay(string cardNumber, decimal amount)
+        public async Task<IActionResult> PayAsync([FromBody] ChargeRequestModel chargeDto)
         {
-            var ufe = _feeExchangeService.CheckAndRefresh();
-
-            var paymentAmount = amount + ufe.Fee;
-
-            var cardToModify = _persist.GetCard(cardNumber);
-            var modifiedCard = _paymentService.Pay(cardToModify, paymentAmount);
+            var charge = new ChargeModel(chargeDto);
+            var chargeAfterPay = await _paymentService.PayAsync(charge);
             
-            modifiedCard.SetLastFee(ufe);
-            return _persist.SaveCard(modifiedCard);
+            return Ok(chargeAfterPay);
         }
     }
 }

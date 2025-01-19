@@ -21,12 +21,19 @@ namespace RP.API.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login([FromBody] UserModel userLogin)
         {
-            if (userLogin.Username == "test" && userLogin.Password == "password")
+            if (userLogin.Username == "string" && userLogin.Password == "string")
             {
                 var tokenString = GenerateToken(userLogin);
                 return Ok(new { Token = tokenString });
             }
             return Unauthorized();
+        }
+
+        [HttpPost(Name = "CreateUser")]
+        public IActionResult Create([FromBody] UserModel user)
+        {
+            var tokenString = GenerateToken(user);
+            return Ok(new { Token = tokenString });
         }
 
         private string GenerateToken(UserModel user)
