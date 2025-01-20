@@ -46,6 +46,9 @@ namespace RP.API.Controllers
         [Authorize]
         public async Task<IActionResult> PayWithCardIdAsync([FromBody] ChargeRequestModel chargeDto)
         {
+            if (chargeDto.CardId < 1)
+                return BadRequest("Missing Card");
+
             try
             {
                 var charge = new ChargeModel(chargeDto);
