@@ -25,6 +25,9 @@ namespace RP.External
         public async Task<ChargeModel> PayWithIdAsync(ChargeModel charge)
         {
             var card = await _cardService.GetCardByIdAsync(charge.CardId);
+
+            if (card is null) throw new Exception("Card not found");
+
             charge.CardNumber = card.Number;
             var chargeResult = await PayAsync(charge);
             return chargeResult;
