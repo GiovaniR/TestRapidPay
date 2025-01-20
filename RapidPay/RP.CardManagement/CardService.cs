@@ -32,7 +32,6 @@ namespace RP.Application
             }
 
             var newCard = new Card(cardNumber, SetCardBalance());
-            //await _cardRepository.AddAsync(newCard);
             await _cardRepository.AddOrUpdateAsync(newCard);
             return newCard;
         }

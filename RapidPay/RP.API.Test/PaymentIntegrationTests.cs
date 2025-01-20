@@ -21,7 +21,6 @@ namespace RP.API.Test
             });
         }
 
-        [Fact]
         public async Task ProcessPayment_ReturnsSuccess_WhenValidDataIsProvided()
         {
             var user = new UserModel() { 

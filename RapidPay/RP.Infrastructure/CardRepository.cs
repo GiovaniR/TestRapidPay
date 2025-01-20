@@ -5,8 +5,6 @@ namespace RP.Infrastructure
 {
     public interface ICardRepository 
     {
-        //Task<Card> AddAsync(Card card);
-        //Task<Card> UpdateAsync(Card card);
         Task<Card> GetCardByNumberAsync(string number);
         Task<IEnumerable<Card>> GetAllCardsAsync();
         Task<Card> GetCardByIdAsync(int id);
@@ -41,43 +39,6 @@ namespace RP.Infrastructure
                     await _context.SaveChangesAsync();
 
                     await uow.CommitAsync();
-                    return card;
-                }
-                catch (Exception ex)
-                {
-                    await uow.RollbackAsync();
-                    throw new Exception("Error while updating the Card", ex);
-                }
-            }
-        }
-
-        public async Task<Card> AddAsync(Card card)
-        {
-            try
-            {
-                await _context.AddAsync(card);
-                await _context.SaveChangesAsync();
-                return card;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while Creating the Card", ex);
-            }
-            
-        }
-
-        public async Task<Card> UpdateAsync(Card card)
-        {
-            using (var uow = new UnitOfWork(_context))
-            { 
-                await uow.BeginTransactionAsync();
-
-                try
-                {
-                    _context.Cards.Update(card);
-                    await _context.SaveChangesAsync();
-
-                    uow.CommitAsync();
                     return card;
                 }
                 catch (Exception ex)

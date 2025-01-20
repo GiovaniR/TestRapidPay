@@ -2,7 +2,7 @@
 
 namespace RP.Infrastructure
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
         Task BeginTransactionAsync();
         Task CommitAsync();
@@ -10,7 +10,7 @@ namespace RP.Infrastructure
         void Dispose();
     }
 
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
         private IDbContextTransaction _transaction;
