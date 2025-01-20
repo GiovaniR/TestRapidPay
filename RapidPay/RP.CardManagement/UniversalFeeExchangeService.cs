@@ -28,7 +28,8 @@ namespace RP.Application
 
         public decimal CheckAndRefresh()
         {
-            if (DateTime.UtcNow - _lastRefreshTime > _expiresAt)
+            //if (DateTime.UtcNow - _lastRefreshTime > _expiresAt)
+            if(true)
             {
                 RefreshFee();
             }

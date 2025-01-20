@@ -32,10 +32,14 @@ namespace RP.API.Controllers
         }
 
         [HttpGet(Name = "GetCardByNumberAsync")]
-        [Authorize]
+        
         public async Task<IActionResult> GetCardByNumberAsync(string number)
         {
             var card = await _cardService.GetCardByNumberAsync(number);
+
+            if (card == null)
+                return NotFound(new { error = "Card not found", message = $"No card exists with {number}" });
+
             return Ok(card);
         }
     }

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using RP.API.Controllers;
 using RP.Application;
-using RP.Infrastructure;
 using RP.Shared;
+using Xunit;
 
 namespace RP.API.Test
 {
@@ -20,7 +20,7 @@ namespace RP.API.Test
         }
 
         [Fact]
-        public async Task CreateCard_ReturnsCreatedResult()
+        public async Task CreateCard_ReturnsOk()
         {
             var createdCard = new Card("123456789012345", 1000);
 
@@ -38,12 +38,29 @@ namespace RP.API.Test
         [Fact]
         public async Task GetCard_ReturnsNotFound_WhenCardDoesNotExist()
         {
-            
+            var searchCard = "123456789012345";
+
+            _cardServiceMock.Setup(s => s.GetCardByNumberAsync(searchCard)).ReturnsAsync((Card)null);
+
+            var result = await _controller.GetCardByNumberAsync(searchCard);
+
+            result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         [Fact]
-        public async Task GetCard_ReturnsOf()
-        { 
+        public async Task GetCard_ReturnsOk_WhenCardExists()
+        {
+            var searchCard = "123456789012345";
+            var card = new Card(searchCard, 1000);
+
+            _cardServiceMock.Setup(s=>s.GetCardByNumberAsync(searchCard)).ReturnsAsync(card);
+
+            var results = await _controller.GetCardByNumberAsync(searchCard);
+
+            var actionResult = results as OkObjectResult;
+            actionResult.Should().NotBeNull();
+            actionResult.StatusCode.Should().Be(200);
+            actionResult.Value.Should().BeEquivalentTo(card);
 
         }
     }

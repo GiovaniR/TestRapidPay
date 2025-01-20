@@ -6,6 +6,7 @@ namespace RP.External
     public interface IPaymentService
     {
         Task<ChargeModel> PayAsync(ChargeModel charge);
+        Task<ChargeModel> PayWithIdAsync(ChargeModel charge);
     }
 
     public class PaymentService : IPaymentService
@@ -19,6 +20,14 @@ namespace RP.External
         {
             _feeExchangeService = universalFeeExchangeService;
             _cardService = cardService;
+        }
+
+        public async Task<ChargeModel> PayWithIdAsync(ChargeModel charge)
+        {
+            var card = await _cardService.GetCardByIdAsync(charge.CardId);
+            charge.CardNumber = card.Number;
+            var chargeResult = await PayAsync(charge);
+            return chargeResult;
         }
 
         public async Task<ChargeModel> PayAsync(ChargeModel charge)

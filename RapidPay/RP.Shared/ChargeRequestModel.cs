@@ -2,6 +2,7 @@
 {
     public class ChargeRequestModel
     {
+        public int CardId { get; set; }
         public string CardNumber { get; set; }
         public decimal SubTotalAmount { get; set; }
         public DateTime ChargeDate { get; set; }
@@ -13,8 +14,14 @@
         public decimal FeeAmount { get; set; }
         public decimal NewBalance { get; set; }
 
+        public ChargeModel()
+        {
+            
+        }
+
         public ChargeModel(ChargeRequestModel request)
         {
+            CardId = request.CardId;
             CardNumber = request.CardNumber;
             SubTotalAmount = request.SubTotalAmount;
             ChargeDate = request.ChargeDate;

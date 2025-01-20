@@ -9,6 +9,7 @@ namespace RP.Application
         Task<Card> GetCardByNumberAsync(string number);
         Task<List<Card>> GetAllCardsAsync();
         Task<Card> SaveAsync(Card card);
+        Task<Card> GetCardByIdAsync(int id);
     }
 
     public class CardService : ICardService
@@ -31,7 +32,8 @@ namespace RP.Application
             }
 
             var newCard = new Card(cardNumber, SetCardBalance());
-            await _cardRepository.SaveAsync(newCard);
+            //await _cardRepository.AddAsync(newCard);
+            await _cardRepository.AddOrUpdateAsync(newCard);
             return newCard;
         }
 
@@ -40,8 +42,14 @@ namespace RP.Application
             return 1000;
         }
 
-        public async Task<Card> GetCardByNumberAsync(string number)
+        public async Task<Card> GetCardByIdAsync(int id)
         { 
+            var card = await _cardRepository.GetCardByIdAsync(id);
+            return card;
+        }
+
+        public async Task<Card> GetCardByNumberAsync(string number)
+        {
             var card = await _cardRepository.GetCardByNumberAsync(number);
             return card;
         }
@@ -49,13 +57,14 @@ namespace RP.Application
         public async Task<List<Card>> GetAllCardsAsync()
         {
             var cards = await _cardRepository.GetAllCardsAsync();
-            return cards;
+            return cards.ToList();
         }
 
         public async Task<Card> SaveAsync(Card card)
         {
-            var savedCard = await _cardRepository.SaveAsync(card);
-            return savedCard;
+            var exists = _cardRepository.GetCardByNumberAsync(card.Number);
+            var newCard = await _cardRepository.AddOrUpdateAsync(card);
+            return newCard;
         }
 
 

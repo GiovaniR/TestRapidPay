@@ -21,7 +21,7 @@ namespace RP.API.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login([FromBody] UserModel userLogin)
         {
-            if (userLogin.Username == "string" && userLogin.Password == "string")
+            if (userLogin.Username == "test" && userLogin.Password == "password")
             {
                 var tokenString = GenerateToken(userLogin);
                 return Ok(new { Token = tokenString });
@@ -50,7 +50,7 @@ namespace RP.API.Controllers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30), // Set expiration time
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

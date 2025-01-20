@@ -4,10 +4,11 @@ namespace RP.Shared
 {
     public class Card
     {
-        [StringLength(maximumLength: 15, MinimumLength = 15)]
+        [Key]
+        public int Id { get; set; }
         public string Number { get; set; }
         public decimal Balance { get; set; }
-        public decimal OriginalAmount { get; }
+        public decimal OriginalAmount { get; set; }
         public decimal LastFee { get; set; }
 
         public Card(string number, decimal originalAmount)

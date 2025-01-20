@@ -1,12 +1,29 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RP.Application;
 using RP.External;
 using RP.Infrastructure;
+using System.Data.Common;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var services = builder.Services;
+
+services.AddSingleton<DbConnection>(container => {
+    var connection = new SqliteConnection("DataSource=:memory:");
+    connection.Open();
+
+    return connection;
+});
+
+services.AddDbContext<ApplicationDbContext>((container, options) => {
+    var connection = container.GetRequiredService<DbConnection>();
+    options.UseSqlite(connection);
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -57,13 +74,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
+//Request specific storage
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
-//Save In-Memory
-builder.Services.AddSingleton<IPersist, Persist>();
+//Save In-Memory for entire application
 builder.Services.AddSingleton<IUniversalFeeExchangeService ,UniversalFeeExchangeService>(provider => new UniversalFeeExchangeService(TimeSpan.FromMinutes(60)));
 
 var app = builder.Build();
@@ -83,4 +99,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{ 
+    var container = scope.ServiceProvider;
+    var db = container.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated();
+}
+
 app.Run();
+
+public partial class Program { }
